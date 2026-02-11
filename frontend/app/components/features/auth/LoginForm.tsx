@@ -20,6 +20,7 @@ import { useState } from "react";
 import { authService } from "@/app/services/api/AuthService";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function LoginForm({
   className,
@@ -101,7 +102,8 @@ export function LoginForm({
                   Login with Google comming soon
                 </Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="#">Sign up</a>
+                  Don&apos;t have an account?{" "}
+                  <Link href="/register">Sign up</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
