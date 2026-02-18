@@ -1,37 +1,27 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { CardContent } from "@/components/ui/card";
+import { Field, FieldGroup } from "@/components/ui/field";
 import { useState } from "react";
 import { authService } from "@/app/services/api/AuthService";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import AuthLayout from "../../layout/auth/AuthLayout";
+import InputAuth from "../../ui/auth/InputAuth";
+import GoogleButtonAuth from "../../ui/auth/GoogleButtonAuth";
+import FooterAuth from "../../ui/auth/FooterAuth";
+import { useAuth } from "@/app/store/auth/auth.context";
 
-export function RegisterForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function RegisterForm() {
   const [information, setInformation] = useState({
     name: "",
     email: "",
     password: "",
     password_confirmation: "",
   });
+
+  const { state } = useAuth();
 
   const handleInformationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInformation((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -58,80 +48,65 @@ export function RegisterForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="border-secondary">
-        <CardHeader>
-          <CardTitle className="mx-auto text-2xl">Storeon</CardTitle>
-          <CardDescription className="mx-auto">
-            Votre plateforme de commerce en ligne
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <FieldGroup className="gap-2">
-              <Field className="gap-1">
-                <FieldLabel htmlFor="name">Username</FieldLabel>
-                <Input
-                  id="name"
-                  type="text"
-                  name="name"
-                  placeholder="Votre username"
-                  required
-                  value={information.name}
-                  onChange={handleInformationChange}
-                />
-              </Field>
-              <Field className="gap-1">
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="Votre email"
-                  required
-                  value={information.email}
-                  onChange={handleInformationChange}
-                />
-              </Field>
-              <Field className="gap-1">
-                <FieldLabel htmlFor="password">Mot de pass</FieldLabel>
-                <Input
-                  id="password"
-                  type="password"
-                  name="password"
-                  placeholder="Votre mot de passe"
-                  value={information.password}
-                  onChange={handleInformationChange}
-                />
-              </Field>
-              <Field className="gap-1">
-                <FieldLabel htmlFor="password_confirmation">
-                  Mot de pass confirmation
-                </FieldLabel>
-                <Input
-                  id="password_confirmation"
-                  type="password"
-                  name="password_confirmation"
-                  placeholder="Votre confirmation mot de pass"
-                  value={information.password_confirmation}
-                  onChange={handleInformationChange}
-                />
-              </Field>
-              <Field className="mt-1">
-                <Button type="submit" className="cursor-pointer">
-                  Register
-                </Button>
-                <Button variant="outline" type="button">
-                  Register with Google comming soon
-                </Button>
-                <FieldDescription className="text-center">
-                  have an account? <Link href="/login">Sign in</Link>
-                </FieldDescription>
-              </Field>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+    <AuthLayout>
+      <CardContent>
+        <form onSubmit={handleSubmit}>
+          <FieldGroup className="gap-2">
+            <InputAuth
+              mode="register"
+              label="Username"
+              name="name"
+              type="text"
+              placeholder="Votre username"
+              required={true}
+              value={information.name}
+              handleInformationChange={handleInformationChange}
+            />
+            <InputAuth
+              mode="register"
+              label="Email"
+              name="email"
+              type="email"
+              placeholder="Votre email"
+              required={true}
+              value={information.email}
+              handleInformationChange={handleInformationChange}
+            />
+            <InputAuth
+              mode="register"
+              label="Mot de pass"
+              name="password"
+              type="password"
+              placeholder="Votre mot de passe"
+              required={true}
+              value={information.password}
+              handleInformationChange={handleInformationChange}
+            />
+            <InputAuth
+              mode="register"
+              label="Mot de pass confirmation"
+              name="password_confirmation"
+              type="password"
+              placeholder="Votre confirmation mot de pass"
+              required={true}
+              value={information.password_confirmation}
+              handleInformationChange={handleInformationChange}
+            />
+
+            <Field className="mt-1">
+              <Button type="submit" className="cursor-pointer">
+                {state?.loading ? "Inscription en cours..." : "S'inscrire"}
+              </Button>
+              <GoogleButtonAuth mode="register" />
+              <FooterAuth
+                text="Vous avez un compte?"
+                link="/login"
+                linkText="Se connecter"
+              />
+            </Field>
+          </FieldGroup>
+        </form>
+      </CardContent>
+    </AuthLayout>
   );
 }

@@ -22,7 +22,7 @@ class RegisterUserAction
                 'password' => Hash::make($data['password']),
             ]);
 
-            $user->assignRole(Role::ADMIN->value);
+            $user->assignRole(Role::CLIENT->value);
 
             $token = $user->createToken("auth-token")->plainTextToken;
 
