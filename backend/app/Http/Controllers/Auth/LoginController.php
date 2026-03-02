@@ -6,26 +6,34 @@ use App\Actions\Auth\LoginUserAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
     public function login(LoginRequest $request, LoginUserAction $action)
     {
-        $result = $action->execute($request->validated());
+        $user = $action->execute($request->validated());
 
-        return response()->json([
-            'message' => 'User logged in successfully',
-            'user' => $result['user'],
-            'token' => $result['token'],
-        ], 200);
+        $request->session()->regenerate();
+
+        return response()->json(
+            [
+                'message' => 'User logged in successfully',
+                'user' => $user
+            ],
+            200
+        );
     }
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return response()->json([
             'message' => 'User logged out successfully'
-        ], 200);
+        ], 200)->cookie('token', null, -1);
     }
 }

@@ -5,7 +5,6 @@ namespace App\Actions\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Enums\Role;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 
@@ -24,11 +23,8 @@ class RegisterUserAction
 
             $user->assignRole(Role::CLIENT->value);
 
-            $token = $user->createToken("auth-token")->plainTextToken;
-
             return [
                 'user' => $user,
-                'token' => $token,
             ];
         });
     }

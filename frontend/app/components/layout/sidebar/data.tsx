@@ -58,8 +58,8 @@ export const data = {
           url: "#",
         },
         {
-          title: "Utilisateurs administrateurs",
-          url: "#",
+          title: "Administrateurs",
+          url: "/administrateurs",
         },
         {
           title: "Rôles et permissions",

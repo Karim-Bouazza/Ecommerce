@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Services\Users\UsersService;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UsersController extends Controller
 {
@@ -12,10 +13,9 @@ class UsersController extends Controller
         private UsersService $usersService
     ) {}
 
-    public function index(): JsonResponse
+    public function index(): AnonymousResourceCollection
     {
-        $users = $this->usersService->getAllAdminstrativeUsers();
 
-        return response()->json($users);
+        return UserResource::collection($this->usersService->getAllAdministrativeUsers());
     }
 }

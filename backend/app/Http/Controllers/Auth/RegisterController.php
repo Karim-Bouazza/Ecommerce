@@ -16,7 +16,6 @@ class RegisterController extends Controller
             'message' => 'User registered successfully',
             'data' => [
                 'user' => $data['user'],
-                'token' => $data['token'],
             ]
         ], 201);
     }

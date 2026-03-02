@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/app/store/auth/auth.context";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import Providers from "./providers/providers";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -27,7 +28,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={poppins.variable}>
         <AuthProvider>
-          <TooltipProvider>{children}</TooltipProvider>
+          <Providers>
+            <TooltipProvider>{children}</TooltipProvider>
+          </Providers>
         </AuthProvider>
         <Toaster />
       </body>
