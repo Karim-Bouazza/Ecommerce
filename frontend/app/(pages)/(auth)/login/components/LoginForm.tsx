@@ -1,41 +1,44 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import AuthLayout from "../../layout/auth/AuthLayout";
-import InputAuth from "../../ui/auth/InputAuth";
-import GoogleButtonAuth from "../../ui/auth/GoogleButtonAuth";
-import FooterAuth from "../../ui/auth/FooterAuth";
-import { useState } from "react";
-import useAuthActions from "@/app/hooks/auth/useAuthActions";
-import { useAuth } from "@/app/store/auth/auth.context";
+import AuthLayout from "@/app/components/layout/auth/AuthLayout";
+import InputAuth from "@/app/components/ui/auth/InputAuth";
+import GoogleButtonAuth from "@/app/components/ui/auth/GoogleButtonAuth";
+import FooterAuth from "@/app/components/ui/auth/FooterAuth";
+import { useLogin } from "../hooks/useLogin";
 
 export function LoginForm() {
   const [information, setInformation] = useState({
-    email: "",
-    password: "",
+    email: "test@example.com",
+    password: "12345678",
   });
 
-  const { login } = useAuthActions();
-  const { state } = useAuth();
+  const router = useRouter();
+  const loginMutation = useLogin();
 
-  const handleInformationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInformation((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleInformationChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setInformation((previous) => ({
+      ...previous,
+      [event.target.name]: event.target.value,
+    }));
   };
 
-  const router = useRouter();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
     try {
-      await login(information.email, information.password);
+      await loginMutation.mutateAsync(information);
       toast.success("Connexion réussie!");
       router.push("/dashboard");
-    } catch (error) {
+    } catch (error: unknown) {
       toast.error("Échec de la connexion. Veuillez vérifier vos identifiants.");
     }
   };
@@ -62,7 +65,6 @@ export function LoginForm() {
                   href="#"
                   className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                 >
-                  {/* to-do */}
                   Forgot your password?
                 </a>
               </div>
@@ -77,8 +79,12 @@ export function LoginForm() {
             </Field>
 
             <Field>
-              <Button type="submit" className="cursor-pointer">
-                {state?.loading ? "Connexion..." : "Connexion"}
+              <Button
+                type="submit"
+                className="cursor-pointer"
+                disabled={loginMutation.isPending}
+              >
+                {loginMutation.isPending ? "Connexion..." : "Connexion"}
               </Button>
               <GoogleButtonAuth mode="login" />
               <FooterAuth

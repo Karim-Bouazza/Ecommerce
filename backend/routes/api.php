@@ -5,8 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Users\UsersController;
-
-
+use Laravel\Sanctum\Sanctum;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -17,4 +16,6 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
 
 // Users
-Route::get('/users/administrative/', [UsersController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+Route::get('/users', [UsersController::class, 'index'])->middleware(['auth:sanctum']);
+# to-do
+Route::get('/users/administrative/', [UsersController::class, 'index'])->middleware(['auth:sanctum']);

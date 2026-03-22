@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
-import { AuthProvider } from "@/app/store/auth/auth.context";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Providers from "./providers/providers";
 
@@ -27,11 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.variable}>
-        <AuthProvider>
-          <Providers>
-            <TooltipProvider>{children}</TooltipProvider>
-          </Providers>
-        </AuthProvider>
+        <Providers>
+          <TooltipProvider>{children}</TooltipProvider>
+        </Providers>
         <Toaster />
       </body>
     </html>

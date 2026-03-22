@@ -3,12 +3,15 @@
 namespace App\Services\Users;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UsersService
 {
-    public function getAllAdministrativeUsers(): Collection
+    public function paginateUsers(int $perPage = 15): LengthAwarePaginator
     {
-        return User::role('admin')->with('roles:id,name')->get();
+        return User::query()
+            ->select(['id', 'name', 'email'])
+            ->orderBy('id', 'desc')
+            ->paginate($perPage);
     }
 }

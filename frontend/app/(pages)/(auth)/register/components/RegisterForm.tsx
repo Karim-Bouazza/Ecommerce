@@ -1,17 +1,17 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import { Field, FieldGroup } from "@/components/ui/field";
-import { useState } from "react";
-import { authService } from "@/app/services/api/AuthService";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import AuthLayout from "../../layout/auth/AuthLayout";
-import InputAuth from "../../ui/auth/InputAuth";
-import GoogleButtonAuth from "../../ui/auth/GoogleButtonAuth";
-import FooterAuth from "../../ui/auth/FooterAuth";
-import { useAuth } from "@/app/store/auth/auth.context";
+import AuthLayout from "@/app/components/layout/auth/AuthLayout";
+import InputAuth from "@/app/components/ui/auth/InputAuth";
+import GoogleButtonAuth from "@/app/components/ui/auth/GoogleButtonAuth";
+import FooterAuth from "@/app/components/ui/auth/FooterAuth";
+import { useRegister } from "../hooks/useRegister";
+import { getRegisterErrorMessage } from "../services/register.service";
 
 export function RegisterForm() {
   const [information, setInformation] = useState({
@@ -21,28 +21,31 @@ export function RegisterForm() {
     password_confirmation: "",
   });
 
-  const { state } = useAuth();
+  const router = useRouter();
+  const registerMutation = useRegister();
 
-  const handleInformationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInformation((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleInformationChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setInformation((previous) => ({
+      ...previous,
+      [event.target.name]: event.target.value,
+    }));
   };
 
-  const router = useRouter();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
     try {
-      const response = await authService.Register(
-        information.name,
-        information.email,
-        information.password,
-        information.password_confirmation,
-      );
+      await registerMutation.mutateAsync(information);
       toast.success("Inscription réussie!");
       router.push("/dashboard");
-    } catch (error) {
+    } catch (error: unknown) {
       toast.error(
-        "Échec de l'inscription. Veuillez vérifier vos informations.",
+        getRegisterErrorMessage(
+          error,
+          "Échec de l'inscription. Veuillez vérifier vos informations.",
+        ),
       );
     }
   };
@@ -94,8 +97,14 @@ export function RegisterForm() {
             />
 
             <Field className="mt-1">
-              <Button type="submit" className="cursor-pointer">
-                {state?.loading ? "Inscription en cours..." : "S'inscrire"}
+              <Button
+                type="submit"
+                className="cursor-pointer"
+                disabled={registerMutation.isPending}
+              >
+                {registerMutation.isPending
+                  ? "Inscription en cours..."
+                  : "S'inscrire"}
               </Button>
               <GoogleButtonAuth mode="register" />
               <FooterAuth

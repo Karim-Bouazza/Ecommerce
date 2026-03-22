@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
+use App\Http\Requests\Users\ListUsersRequest;
+use App\Http\Resources\UserListResource;
 use App\Services\Users\UsersService;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UsersController extends Controller
@@ -13,9 +15,12 @@ class UsersController extends Controller
         private UsersService $usersService
     ) {}
 
-    public function index(): AnonymousResourceCollection
+    public function index(ListUsersRequest $request): AnonymousResourceCollection
     {
+        $paginatedUsers = $this->usersService->paginateUsers($request->perPage());
 
-        return UserResource::collection($this->usersService->getAllAdministrativeUsers());
+        return UserListResource::collection(
+            Collection::make($paginatedUsers->items())
+        );
     }
 }
