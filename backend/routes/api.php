@@ -17,5 +17,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:san
 
 // Users
 Route::get('/users', [UsersController::class, 'index'])->middleware(['auth:sanctum']);
-# to-do
-Route::get('/users/administrative/', [UsersController::class, 'index'])->middleware(['auth:sanctum']);
+Route::get('/users/{id}', [UsersController::class, 'show'])
+    ->whereNumber('id')
+    ->middleware(['auth:sanctum']);

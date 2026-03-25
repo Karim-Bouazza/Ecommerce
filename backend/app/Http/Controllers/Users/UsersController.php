@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\ListUsersRequest;
 use App\Http\Resources\UserListResource;
+use App\Http\Resources\UserResource;
 use App\Services\Users\UsersService;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -22,5 +23,12 @@ class UsersController extends Controller
         return UserListResource::collection(
             Collection::make($paginatedUsers->items())
         );
+    }
+
+    public function show(int $id): UserResource
+    {
+        $user = $this->usersService->findUserById($id);
+
+        return new UserResource($user);
     }
 }

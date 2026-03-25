@@ -1,4 +1,6 @@
-import TablePagination from "@/src/components/common/Table/TablePagination";
+import TablePagination from "./TablePagination";
+
+const PAGESIZE = 1000;
 
 export default function TableContainer({
   children,
@@ -12,17 +14,18 @@ export default function TableContainer({
   handlePaginationPreviousChange: () => void;
   page: number;
   total: number;
+  pageSize?: number;
 }) {
   return (
-    <div className="w-full flex flex-col px-5 pb-10 pt-2">
-      <div className="border border-gray-200 transition-all duration-300 bg-white px-4">
+    <div className="w-full px-5 pb-10 pt-2">
+      <div className="w-full rounded-2xl border border-gray-200 bg-white px-4 transition-all duration-300">
         {children}
 
         <TablePagination
           onNext={handlePaginationNextChange}
           onPrevious={handlePaginationPreviousChange}
           currentPage={page}
-          totalPages={Math.ceil(total / 10)}
+          totalPages={Math.ceil(total / PAGESIZE)}
         />
       </div>
     </div>

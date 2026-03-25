@@ -1,10 +1,5 @@
-"use client";
+import Users from "./users";
 
-export default function Administrateurs() {
-  return (
-    <div>
-      <h1>Administrateurs</h1>
-      <p>Gérez les administrateurs de votre plateforme ici.</p>
-    </div>
-  );
+export default function Page() {
+  return <Users />;
 }

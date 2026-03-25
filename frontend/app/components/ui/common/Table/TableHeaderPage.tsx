@@ -8,8 +8,8 @@ export default function TableHeaderPage({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="flex justify-between items-center py-2.5 px-2 border-b">
-      <p className="text-xl py-1 sm:py-0 sm:text-base md:text-lg font-semibold text-black/80 dark:text-white">
+    <div className="flex justify-between items-center py-2.5 px-2">
+      <p className="text-xl py-1 sm:py-0 sm:text-base md:text-lg font-semibold">
         {title}
       </p>
       {children}
