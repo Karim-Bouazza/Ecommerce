@@ -6,6 +6,8 @@ use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UsersService
 {
@@ -42,5 +44,25 @@ class UsersService
                 'updated_at',
             ])
             ->findOrFail($id);
+    }
+
+    public function createUser(array $data): User
+    {
+        return DB::transaction(function () use ($data): User {
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'first_name' => $data['first_name'] ?? null,
+                'last_name' => $data['last_name'] ?? null,
+                'phone_number' => $data['phone_number'] ?? null,
+                'province' => $data['province'] ?? null,
+                'city' => $data['city'] ?? null,
+            ]);
+
+            $user->assignRole($data['role']);
+
+            return $user->load('roles:id,name');
+        });
     }
 }

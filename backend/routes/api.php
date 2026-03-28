@@ -16,7 +16,8 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
 
 // Users
-Route::get('/users', [UsersController::class, 'index'])->middleware(['auth:sanctum']);
+Route::get('/users', [UsersController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+Route::post('/users', [UsersController::class, 'store'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/users/{id}', [UsersController::class, 'show'])
     ->whereNumber('id')
-    ->middleware(['auth:sanctum']);
+    ->middleware(['auth:sanctum', 'role:admin']);
