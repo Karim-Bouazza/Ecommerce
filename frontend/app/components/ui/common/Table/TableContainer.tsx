@@ -18,7 +18,7 @@ export default function TableContainer({
 }) {
   return (
     <div className="w-full px-5 pb-10 pt-2">
-      <div className="w-full rounded-2xl border border-gray-200 bg-white px-4 transition-all duration-300">
+      <div className="w-full rounded-2xl border border-gray-200 bg-white px-4 transition-opacity duration-300">
         {children}
 
         <TablePagination

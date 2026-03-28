@@ -15,7 +15,7 @@ import { useLogin } from "../hooks/useLogin";
 
 export function LoginForm() {
   const [information, setInformation] = useState({
-    email: "test@example.com",
+    email: "salim@gmail.com",
     password: "12345678",
   });
 
