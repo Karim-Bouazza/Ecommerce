@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Catalog;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Catalog\CategoryListResource;
-use App\Http\Requests\Catalog\ListCategoriesRequest;
-use App\Http\Requests\Catalog\StoreCategoryRequest;
-use App\Http\Requests\Catalog\UpdateCategoryRequest;
-use App\Http\Resources\Catalog\CategoryResource;
+use App\Http\Requests\Catalog\Categories\ListCategoriesRequest;
+use App\Http\Requests\Catalog\Categories\StoreCategoryRequest;
+use App\Http\Requests\Catalog\Categories\UpdateCategoryRequest;
+use App\Http\Resources\Catalog\Categories\CategoryListResource;
+use App\Http\Resources\Catalog\Categories\CategoryResource;
 use App\Models\Category;
 use App\Services\Catalog\CategoriesService;
 use App\Traits\HasPagination;
