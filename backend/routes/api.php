@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Catalog\CategoriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
@@ -19,5 +20,18 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:san
 Route::get('/users', [UsersController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
 Route::post('/users', [UsersController::class, 'store'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/users/{id}', [UsersController::class, 'show'])
+    ->whereNumber('id')
+    ->middleware(['auth:sanctum', 'role:admin']);
+
+// Categories
+Route::get('/categories', [CategoriesController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+Route::post('/categories', [CategoriesController::class, 'store'])->middleware(['auth:sanctum', 'role:admin']);
+Route::get('/categories/{id}', [CategoriesController::class, 'show'])
+    ->whereNumber('id')
+    ->middleware(['auth:sanctum', 'role:admin']);
+Route::patch('/categories/{id}', [CategoriesController::class, 'update'])
+    ->whereNumber('id')
+    ->middleware(['auth:sanctum', 'role:admin']);
+Route::delete('/categories/{id}', [CategoriesController::class, 'destroy'])
     ->whereNumber('id')
     ->middleware(['auth:sanctum', 'role:admin']);

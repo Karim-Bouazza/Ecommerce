@@ -12,5 +12,10 @@ export default function useUsers() {
       const users = await api.get("/api/users/");
       return users.data;
     },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
   });
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Users;
+namespace App\Http\Requests\Catalog;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ListUsersRequest extends FormRequest
+class ListCategoriesRequest extends FormRequest
 {
     public function authorize(): bool
     {

@@ -1,7 +1,20 @@
-export default function Loading() {
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import PageContainer from "@/app/components/ui/common/PageContainer";
+
+type LoadingProps = {
+  message?: string;
+};
+
+export default function Loading({
+  message = "Chargement du profil...",
+}: LoadingProps) {
   return (
-    <div className="flex items-center justify-center min-h-90">
-      <p className="text-lg">Loading...</p>
-    </div>
+    <PageContainer>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-center">{message}</CardTitle>
+        </CardHeader>
+      </Card>
+    </PageContainer>
   );
 }

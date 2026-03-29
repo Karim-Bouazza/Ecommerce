@@ -2,29 +2,37 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\CreateUserRequest;
 use App\Http\Requests\Users\ListUsersRequest;
 use App\Http\Resources\UserListResource;
 use App\Http\Resources\UserResource;
+use App\Models\User;
 use App\Services\Users\UsersService;
+use App\Traits\HasPagination;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Collection;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UsersController extends Controller
 {
+    use HasPagination;
+
     public function __construct(
         private UsersService $usersService
     ) {}
 
     public function index(ListUsersRequest $request): AnonymousResourceCollection
     {
-        $paginatedUsers = $this->usersService->paginateUsers($request->perPage());
+        $query = User::query()
+            ->with('roles:id,name')
+            ->whereDoesntHave('roles', function ($query): void {
+                $query->where('name', Role::CLIENT->value);
+            })
+            ->select(['id', 'name', 'email'])
+            ->orderBy('id', 'desc');
 
-        return UserListResource::collection(
-            Collection::make($paginatedUsers->items())
-        );
+        return UserListResource::collection($this->items($query, $request));
     }
 
     public function show(int $id): UserResource

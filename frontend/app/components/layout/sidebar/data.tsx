@@ -1,7 +1,7 @@
 import {
   AudioWaveform,
   BookOpen,
-  Bot,
+  Package,
   Command,
   Frame,
   GalleryVerticalEnd,
@@ -68,17 +68,17 @@ export const data = {
       ],
     },
     {
-      title: "Models",
+      title: "Produits",
       url: "#",
-      icon: Bot,
+      icon: Package,
       items: [
         {
-          title: "Genesis",
-          url: "#",
+          title: "Tous les produits",
+          url: "/produits",
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "Catégories",
+          url: "/categories",
         },
         {
           title: "Quantum",

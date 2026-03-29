@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
+import Loading from "@/app/components/ui/common/Loading";
+import PageContainer from "@/app/components/ui/common/PageContainer";
 import useUserById from "../hooks/core/useUserById";
 
 type MainTab = "informations" | "rapports";
@@ -44,20 +46,12 @@ export default function UserDetailsPage() {
   const [activeDetailsTab, setActiveDetailsTab] = useState<DetailsTab>("about");
 
   if (isLoading) {
-    return (
-      <div className="px-6 py-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Chargement du profil...</CardTitle>
-          </CardHeader>
-        </Card>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (isError || !user) {
     return (
-      <div className="px-6 py-8">
+      <PageContainer>
         <Card>
           <CardHeader>
             <CardTitle>Impossible de charger ce profil</CardTitle>
@@ -67,12 +61,12 @@ export default function UserDetailsPage() {
             </CardDescription>
           </CardHeader>
         </Card>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="px-6 py-8">
+    <PageContainer>
       <Card className="mx-auto max-w-6xl">
         <CardContent className="grid grid-cols-1 gap-8 pt-6 lg:grid-cols-[300px_1fr]">
           <aside className="space-y-8">
@@ -241,6 +235,6 @@ export default function UserDetailsPage() {
           </section>
         </CardContent>
       </Card>
-    </div>
+    </PageContainer>
   );
 }

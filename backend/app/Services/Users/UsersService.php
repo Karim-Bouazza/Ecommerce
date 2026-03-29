@@ -2,27 +2,13 @@
 
 namespace App\Services\Users;
 
-use App\Enums\Role;
 use App\Models\User;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UsersService
 {
-    public function paginateUsers(int $perPage = 15): LengthAwarePaginator
-    {
-        return User::query()
-            ->with('roles:id,name')
-            ->whereDoesntHave('roles', function ($query): void {
-                $query->where('name', Role::CLIENT->value);
-            })
-            ->select(['id', 'name', 'email'])
-            ->orderBy('id', 'desc')
-            ->paginate($perPage);
-    }
-
     /**
      * @throws ModelNotFoundException
      */
