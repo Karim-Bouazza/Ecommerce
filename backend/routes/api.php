@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Catalog\CategoriesController;
 use App\Http\Controllers\Catalog\ProductsController;
+use App\Http\Controllers\Orders\OrdersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
@@ -49,3 +50,17 @@ Route::patch('/products/{id}', [ProductsController::class, 'update'])
 Route::delete('/products/{id}', [ProductsController::class, 'destroy'])
     ->whereNumber('id')
     ->middleware(['auth:sanctum', 'role:admin']);
+
+// Orders
+Route::get('/orders', [OrdersController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+Route::get('/orders/{id}', [OrdersController::class, 'show'])
+    ->whereNumber('id')
+    ->middleware(['auth:sanctum', 'role:admin']);
+
+// Public shop catalog
+Route::get('/shop/products', [ProductsController::class, 'index']);
+Route::get('/shop/products/{id}', [ProductsController::class, 'show'])
+    ->whereNumber('id');
+
+// Public shop orders
+Route::post('/shop/orders', [OrdersController::class, 'store']);

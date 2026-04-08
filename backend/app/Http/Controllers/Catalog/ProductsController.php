@@ -26,15 +26,13 @@ class ProductsController extends Controller
     public function index(ListProductsRequest $request): AnonymousResourceCollection
     {
         $query = Product::query()
-            ->with('category:id,name')
             ->select([
                 'id',
                 'title',
-                'description',
                 'quantity',
                 'price',
                 'price_after_discount',
-                'category_id',
+                'main_photo_path',
             ])
             ->orderBy('id', 'desc');
 
@@ -50,7 +48,13 @@ class ProductsController extends Controller
 
     public function store(StoreProductRequest $request): JsonResponse
     {
-        $product = $this->productsService->createProduct($request->validated());
+        $payload = $request->validated();
+
+        if ($request->hasFile('main_photo')) {
+            $payload['main_photo'] = $request->file('main_photo');
+        }
+
+        $product = $this->productsService->createProduct($payload);
 
         return (new ProductResource($product))
             ->response()
@@ -59,7 +63,13 @@ class ProductsController extends Controller
 
     public function update(UpdateProductRequest $request, int $id): ProductResource
     {
-        $product = $this->productsService->updateProduct($id, $request->validated());
+        $payload = $request->validated();
+
+        if ($request->hasFile('main_photo')) {
+            $payload['main_photo'] = $request->file('main_photo');
+        }
+
+        $product = $this->productsService->updateProduct($id, $payload);
 
         return new ProductResource($product);
     }

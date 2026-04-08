@@ -15,14 +15,12 @@ class ProductListResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'description' => $this->description,
             'quantity' => $this->quantity,
             'price' => $this->price,
             'price_after_discount' => $this->price_after_discount,
-            'category' => [
-                'id' => $this->category?->id,
-                'name' => $this->category?->name,
-            ],
+            'main_photo_url' => $this->main_photo_path
+                ? asset('storage/' . $this->main_photo_path)
+                : null,
         ];
     }
 }

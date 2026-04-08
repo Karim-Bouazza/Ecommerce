@@ -12,7 +12,7 @@ import {
 } from "react-hook-form";
 import { toast } from "sonner";
 
-import useCreateUser from "@/app/(pages)/(dashboard)/(users)/administrateurs/hooks/core/useCreateUser";
+import useCreateUser from "@/app/(pages)/admin/(dashboard)/(users)/administrateurs/hooks/core/useCreateUser";
 import { createUserSchema, type CreateUserInput } from "@/lib/schemas/user";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

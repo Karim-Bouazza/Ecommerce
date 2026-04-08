@@ -98,7 +98,7 @@ export default function Categories() {
 
   const handleViewCategory = useCallback(
     (categoryId: number) => {
-      router.push(`/categories/${categoryId}`);
+      router.push(`/admin/categories/${categoryId}`);
     },
     [router],
   );

@@ -37,7 +37,7 @@ export function LoginForm() {
     try {
       await loginMutation.mutateAsync(information);
       toast.success("Connexion réussie!");
-      router.push("/dashboard");
+      router.push("/admin/dashboard");
     } catch (error: unknown) {
       toast.error("Échec de la connexion. Veuillez vérifier vos identifiants.");
     }

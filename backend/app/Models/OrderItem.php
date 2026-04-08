@@ -5,9 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Product extends Model
+class OrderItem extends Model
 {
     use HasFactory;
 
@@ -15,13 +14,11 @@ class Product extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'title',
-        'description',
+        'order_id',
+        'product_id',
         'quantity',
-        'price',
-        'price_after_discount',
-        'category_id',
-        'main_photo_path',
+        'unit_price',
+        'total_price',
     ];
 
     /**
@@ -31,18 +28,18 @@ class Product extends Model
     {
         return [
             'quantity' => 'integer',
-            'price' => 'decimal:2',
-            'price_after_discount' => 'decimal:2',
+            'unit_price' => 'decimal:2',
+            'total_price' => 'decimal:2',
         ];
     }
 
-    public function category(): BelongsTo
+    public function order(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Order::class);
     }
 
-    public function orderItems(): HasMany
+    public function product(): BelongsTo
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->belongsTo(Product::class);
     }
 }

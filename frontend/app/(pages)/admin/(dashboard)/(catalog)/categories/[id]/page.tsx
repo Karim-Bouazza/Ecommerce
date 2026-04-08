@@ -56,7 +56,7 @@ export default function CategoryDetailsPage() {
     try {
       await deleteCategory.mutateAsync(categoryId);
       toast.success("Catégorie supprimée avec succès.");
-      router.push("/categories");
+      router.push("/admin/categories");
     } catch {
       toast.error("Impossible de supprimer la catégorie.");
     }
@@ -89,7 +89,7 @@ export default function CategoryDetailsPage() {
             <CardTitle className="text-2xl">Détail catégorie</CardTitle>
             <Button
               variant="outline"
-              onClick={() => router.push("/categories")}
+              onClick={() => router.push("/admin/categories")}
             >
               Retour à la liste
             </Button>

@@ -9,6 +9,7 @@ import {
   PieChart,
   Settings2,
   Users,
+  ShoppingCart,
 } from "lucide-react";
 
 export const data = {
@@ -59,11 +60,11 @@ export const data = {
         },
         {
           title: "Administrateurs",
-          url: "/administrateurs",
+          url: "/admin/administrateurs",
         },
         {
           title: "Rôles et permissions",
-          url: "#",
+          url: "/admin/roles-permissions",
         },
       ],
     },
@@ -74,11 +75,11 @@ export const data = {
       items: [
         {
           title: "Tous les produits",
-          url: "/produits",
+          url: "/admin/produits",
         },
         {
           title: "Catégories",
-          url: "/categories",
+          url: "/admin/categories",
         },
         {
           title: "Quantum",
@@ -87,13 +88,13 @@ export const data = {
       ],
     },
     {
-      title: "Documentation",
+      title: "Commandes",
       url: "#",
-      icon: BookOpen,
+      icon: ShoppingCart,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "Toutes les commandes",
+          url: "/admin/commandes",
         },
         {
           title: "Get Started",
