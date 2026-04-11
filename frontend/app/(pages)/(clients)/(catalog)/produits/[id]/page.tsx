@@ -42,7 +42,7 @@ export default function ProductDetailsPage() {
 
   return (
     <main className="min-h-screen px-4 py-8 sm:px-8 sm:py-9">
-      <div className="mx-auto w-full max-w-5xl space-y-3.5">
+      <div className="mx-auto w-full max-w-6xl space-y-3.5">
         <div className="flex items-center justify-between">
           <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
             Home / Shop / {product.title}
@@ -52,7 +52,7 @@ export default function ProductDetailsPage() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 gap-3.5 lg:grid-cols-[0.95fr_0.8fr]">
+        <div className="grid grid-cols-1 gap-3.5 lg:grid-cols-[0.9fr_1.1fr]">
           <ProductMedia product={product} />
 
           <div className="space-y-3.5">

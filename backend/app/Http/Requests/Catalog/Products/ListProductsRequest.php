@@ -19,6 +19,9 @@ class ListProductsRequest extends FormRequest
         return [
             'per_page' => ['sometimes', 'integer', 'min:1', 'max:' . $this->maxPerPage()],
             'page' => ['sometimes', 'integer', 'min:1'],
+            'category' => ['sometimes', 'integer', 'exists:categories,id'],
+            'min_price' => ['sometimes', 'numeric', 'min:0'],
+            'max_price' => ['sometimes', 'numeric', 'gte:min_price'],
         ];
     }
 

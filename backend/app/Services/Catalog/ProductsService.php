@@ -3,10 +3,12 @@
 namespace App\Services\Catalog;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+
 
 class ProductsService
 {
@@ -110,5 +112,27 @@ class ProductsService
         }
 
         Storage::disk('public')->delete($path);
+    }
+
+    public function getProductFilters(): array
+    {
+        $categories = Category::query()
+            ->select(['id', 'name'])
+            ->withCount('products')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $pricesRange = Product::query()
+            ->selectRaw('MIN(COALESCE(price_after_discount, price)) as min_price')
+            ->selectRaw('MAX(COALESCE(price_after_discount, price)) as max_price')
+            ->first();
+
+        return [
+            'categories' => $categories,
+            'prices_range' => [
+                'min_price' => (float) ($pricesRange?->min_price ?? 0),
+                'max_price' => (float) ($pricesRange?->max_price ?? 0),
+            ],
+        ];
     }
 }

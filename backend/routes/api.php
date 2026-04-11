@@ -40,6 +40,7 @@ Route::delete('/categories/{id}', [CategoriesController::class, 'destroy'])
 
 // Products
 Route::get('/products', [ProductsController::class, 'index'])->middleware(['auth:sanctum', 'role:admin']);
+Route::get('/products/filters', [ProductsController::class, 'filters'])->middleware(['auth:sanctum', 'role:admin']);
 Route::post('/products', [ProductsController::class, 'store'])->middleware(['auth:sanctum', 'role:admin']);
 Route::get('/products/{id}', [ProductsController::class, 'show'])
     ->whereNumber('id')
@@ -57,10 +58,13 @@ Route::get('/orders/{id}', [OrdersController::class, 'show'])
     ->whereNumber('id')
     ->middleware(['auth:sanctum', 'role:admin']);
 
+
 // Public shop catalog
 Route::get('/shop/products', [ProductsController::class, 'index']);
+Route::get('/shop/products/filters', [ProductsController::class, 'filters']);
 Route::get('/shop/products/{id}', [ProductsController::class, 'show'])
     ->whereNumber('id');
+Route::get('/shop/categories', [CategoriesController::class, 'index']);
 
 // Public shop orders
 Route::post('/shop/orders', [OrdersController::class, 'store']);

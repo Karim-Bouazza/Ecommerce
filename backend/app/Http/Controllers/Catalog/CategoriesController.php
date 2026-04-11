@@ -27,6 +27,7 @@ class CategoriesController extends Controller
     {
         $query = Category::query()
             ->select(['id', 'name'])
+            ->withCount('products')
             ->orderBy('id', 'desc');
 
         return CategoryListResource::collection($this->items($query, $request));

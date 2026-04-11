@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Catalog;
 
+use App\Filters\ProductFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Catalog\Products\ListProductsRequest;
 use App\Http\Requests\Catalog\Products\StoreProductRequest;
 use App\Http\Requests\Catalog\Products\UpdateProductRequest;
+use App\Http\Resources\Catalog\Products\ProductFiltersResource;
 use App\Http\Resources\Catalog\Products\ProductListResource;
 use App\Http\Resources\Catalog\Products\ProductResource;
 use App\Models\Product;
@@ -33,8 +35,12 @@ class ProductsController extends Controller
                 'price',
                 'price_after_discount',
                 'main_photo_path',
+                'category_id'
             ])
             ->orderBy('id', 'desc');
+
+        $filter = new ProductFilter($request->validated());
+        $query = $filter->apply($query);
 
         return ProductListResource::collection($this->items($query, $request));
     }
@@ -79,5 +85,11 @@ class ProductsController extends Controller
         $this->productsService->deleteProduct($id);
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function filters(): JsonResponse
+    {
+        return (new ProductFiltersResource($this->productsService->getProductFilters()))
+            ->response();
     }
 }

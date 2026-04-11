@@ -6,8 +6,32 @@ export type ClientProductListItem = {
     main_photo_url: string | null;
 };
 
+export type ClientCategoryListItem = {
+    id: number;
+    name: string;
+    products_count: number;
+};
+
+export type ClientPriceRange = {
+    min_price: number;
+    max_price: number;
+};
+
+export type ClientProductFilters = {
+    categories: ClientCategoryListItem[];
+    prices_range: ClientPriceRange;
+};
+
 export type ClientProductsResponse = {
     data: ClientProductListItem[];
+};
+
+export type ClientCategoriesResponse = {
+    data: ClientCategoryListItem[];
+};
+
+export type ClientProductFiltersResponse = {
+    data: ClientProductFilters;
 };
 
 export type ClientProductDetails = {

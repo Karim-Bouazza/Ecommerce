@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filters\ProductFilter;
+namespace App\Filters;
 
 class ProductFilter
 {
@@ -26,13 +26,26 @@ class ProductFilter
 
     protected function filters()
     {
-        return $this->request->only([
-            'category_id'
-        ]);
+        return [
+            'category' => $this->request['category'] ?? null,
+            'min_price' => $this->request['min_price'] ?? null,
+            'max_price' => $this->request['max_price'] ?? null,
+
+        ];
     }
 
-    protected function category_id($value)
+    protected function category($value)
     {
         $this->query->where('category_id', $value);
+    }
+
+    protected function min_price($value)
+    {
+        $this->query->where('price', '>=', $value);
+    }
+
+    protected function max_price($value)
+    {
+        $this->query->where('price', '<=', $value);
     }
 }
