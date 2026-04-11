@@ -42,6 +42,10 @@ export type ClientProductDetails = {
     price: string | number;
     price_after_discount: string | number | null;
     main_photo_url: string | null;
+    sub_image_url_01?: string | null;
+    sub_image_url_02?: string | null;
+    sub_image_url_03?: string | null;
+    sub_images?: string[];
     category: {
         id: number;
         name: string;

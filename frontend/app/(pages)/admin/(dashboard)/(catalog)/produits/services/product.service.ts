@@ -83,6 +83,18 @@ class ProductService {
             formData.append("main_photo", payload.main_photo);
         }
 
+        if (payload.sub_image_01) {
+            formData.append("sub_image_01", payload.sub_image_01);
+        }
+
+        if (payload.sub_image_02) {
+            formData.append("sub_image_02", payload.sub_image_02);
+        }
+
+        if (payload.sub_image_03) {
+            formData.append("sub_image_03", payload.sub_image_03);
+        }
+
         return formData;
     }
 }

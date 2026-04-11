@@ -8,6 +8,7 @@ import useProductById from "../hooks/core/useProductById";
 import ProductMedia from "../components/detail/ProductMedia";
 import ProductSummary from "../components/detail/ProductSummary";
 import OrderForm from "../components/detail/OrderForm";
+import ProductDescription from "../components/detail/ProductDescription";
 
 export default function ProductDetailsPage() {
   const params = useParams();
@@ -60,6 +61,8 @@ export default function ProductDetailsPage() {
             <OrderForm productId={product.id} maxQuantity={product.quantity} />
           </div>
         </div>
+
+        <ProductDescription description={product.description} />
       </div>
     </main>
   );

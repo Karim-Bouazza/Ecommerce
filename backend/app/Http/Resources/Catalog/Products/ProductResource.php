@@ -22,6 +22,11 @@ class ProductResource extends JsonResource
             'main_photo_url' => $this->main_photo_path
                 ? asset('storage/' . $this->main_photo_path)
                 : null,
+            'sub_images' => array_values(array_filter([
+                $this->sub_image_url_01 ? asset('storage/' . $this->sub_image_url_01) : null,
+                $this->sub_image_url_02 ? asset('storage/' . $this->sub_image_url_02) : null,
+                $this->sub_image_url_03 ? asset('storage/' . $this->sub_image_url_03) : null,
+            ])),
             'category' => [
                 'id' => $this->category?->id,
                 'name' => $this->category?->name,

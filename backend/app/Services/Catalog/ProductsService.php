@@ -28,6 +28,9 @@ class ProductsService
                 'price_after_discount',
                 'category_id',
                 'main_photo_path',
+                'sub_image_url_01',
+                'sub_image_url_02',
+                'sub_image_url_03',
                 'created_at',
                 'updated_at',
             ])
@@ -37,8 +40,11 @@ class ProductsService
     public function createProduct(array $data): Product
     {
         $mainPhoto = $data['main_photo'] ?? null;
+        $subImage01 = $data['sub_image_01'] ?? null;
+        $subImage02 = $data['sub_image_02'] ?? null;
+        $subImage03 = $data['sub_image_03'] ?? null;
 
-        return DB::transaction(function () use ($data, $mainPhoto): Product {
+        return DB::transaction(function () use ($data, $mainPhoto, $subImage01, $subImage02, $subImage03): Product {
             $product = Product::query()->create([
                 'title' => $data['title'],
                 'description' => $data['description'] ?? '',
@@ -48,6 +54,15 @@ class ProductsService
                 'category_id' => $data['category_id'],
                 'main_photo_path' => $mainPhoto instanceof UploadedFile
                     ? $this->storeMainPhoto($mainPhoto)
+                    : null,
+                'sub_image_url_01' => $subImage01 instanceof UploadedFile
+                    ? $this->storeSubImage($subImage01, 1)
+                    : null,
+                'sub_image_url_02' => $subImage02 instanceof UploadedFile
+                    ? $this->storeSubImage($subImage02, 2)
+                    : null,
+                'sub_image_url_03' => $subImage03 instanceof UploadedFile
+                    ? $this->storeSubImage($subImage03, 3)
                     : null,
             ]);
 
@@ -63,22 +78,38 @@ class ProductsService
         return DB::transaction(function () use ($id, $data): Product {
             $product = Product::query()->findOrFail($id);
             $mainPhoto = $data['main_photo'] ?? null;
+            $subImageFields = [
+                'sub_image_01' => 'sub_image_url_01',
+                'sub_image_02' => 'sub_image_url_02',
+                'sub_image_03' => 'sub_image_url_03',
+            ];
 
             if ($mainPhoto instanceof UploadedFile) {
                 $newMainPhotoPath = $this->storeMainPhoto($mainPhoto);
                 $oldMainPhotoPath = $product->main_photo_path;
 
                 $data['main_photo_path'] = $newMainPhotoPath;
-                unset($data['main_photo']);
-
-                $product->update($data);
-
                 $this->deleteMainPhoto($oldMainPhotoPath);
-
-                return $product->fresh()->load('category:id,name');
             }
 
             unset($data['main_photo']);
+
+            foreach ($subImageFields as $requestField => $dbField) {
+                $file = $data[$requestField] ?? null;
+                if (! $file instanceof UploadedFile) {
+                    unset($data[$requestField]);
+                    continue;
+                }
+
+                $slot = (int) substr($requestField, -1);
+                $newSubImagePath = $this->storeSubImage($file, $slot);
+                $oldSubImagePath = $product->{$dbField};
+
+                $data[$dbField] = $newSubImagePath;
+                unset($data[$requestField]);
+
+                $this->deleteMainPhoto($oldSubImagePath);
+            }
 
             $product->update($data);
 
@@ -94,15 +125,28 @@ class ProductsService
         DB::transaction(function () use ($id): void {
             $product = Product::query()->findOrFail($id);
             $mainPhotoPath = $product->main_photo_path;
+            $subImagePaths = [
+                $product->sub_image_url_01,
+                $product->sub_image_url_02,
+                $product->sub_image_url_03,
+            ];
             $product->delete();
 
             $this->deleteMainPhoto($mainPhotoPath);
+            foreach ($subImagePaths as $subImagePath) {
+                $this->deleteMainPhoto($subImagePath);
+            }
         });
     }
 
     private function storeMainPhoto(UploadedFile $file): string
     {
         return $file->store('products/main-photos', 'public');
+    }
+
+    private function storeSubImage(UploadedFile $file, int $slot): string
+    {
+        return $file->store('products/sub-images/' . $slot, 'public');
     }
 
     private function deleteMainPhoto(?string $path): void

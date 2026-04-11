@@ -31,4 +31,7 @@ export type ProductPayload = {
     price_after_discount?: number | null;
     category_id: number;
     main_photo?: File | null;
+    sub_image_01?: File | null;
+    sub_image_02?: File | null;
+    sub_image_03?: File | null;
 };

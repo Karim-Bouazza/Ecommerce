@@ -3,6 +3,43 @@ import { z } from "zod";
 const allowedImageTypes = ["image/jpeg", "image/png", "image/webp"];
 const maxImageSizeInBytes = 5 * 1024 * 1024;
 
+const imageFileSchema = z
+    .custom<File | null | undefined>(
+        (value) => {
+            if (value === undefined || value === null) {
+                return true;
+            }
+
+            if (typeof File === "undefined") {
+                return false;
+            }
+
+            return value instanceof File;
+        },
+        "Le fichier photo est invalide.",
+    )
+    .refine(
+        (value) => {
+            if (!value) {
+                return true;
+            }
+
+            return allowedImageTypes.includes(value.type);
+        },
+        "Le format de l'image doit être JPG, PNG ou WEBP.",
+    )
+    .refine(
+        (value) => {
+            if (!value) {
+                return true;
+            }
+
+            return value.size <= maxImageSizeInBytes;
+        },
+        "La taille de l'image ne doit pas dépasser 5 Mo.",
+    )
+    .optional();
+
 export const productFormSchema = z
     .object({
         title: z
@@ -36,42 +73,10 @@ export const productFormSchema = z
                 "Le prix doit être un nombre positif ou nul.",
             ),
         price_after_discount: z.string().trim().optional().or(z.literal("")),
-        main_photo: z
-            .custom<File | null | undefined>(
-                (value) => {
-                    if (value === undefined || value === null) {
-                        return true;
-                    }
-
-                    if (typeof File === "undefined") {
-                        return false;
-                    }
-
-                    return value instanceof File;
-                },
-                "Le fichier photo est invalide.",
-            )
-            .refine(
-                (value) => {
-                    if (!value) {
-                        return true;
-                    }
-
-                    return allowedImageTypes.includes(value.type);
-                },
-                "Le format de l'image doit être JPG, PNG ou WEBP.",
-            )
-            .refine(
-                (value) => {
-                    if (!value) {
-                        return true;
-                    }
-
-                    return value.size <= maxImageSizeInBytes;
-                },
-                "La taille de l'image ne doit pas dépasser 5 Mo.",
-            )
-            .optional(),
+        main_photo: imageFileSchema,
+        sub_image_01: imageFileSchema,
+        sub_image_02: imageFileSchema,
+        sub_image_03: imageFileSchema,
         category_id: z
             .string()
             .trim()
@@ -122,5 +127,8 @@ export function mapProductFormToPayload(values: ProductFormInput) {
             trimmedDiscount.length > 0 ? Number(trimmedDiscount) : null,
         category_id: Number(values.category_id),
         main_photo: values.main_photo ?? null,
+        sub_image_01: values.sub_image_01 ?? null,
+        sub_image_02: values.sub_image_02 ?? null,
+        sub_image_03: values.sub_image_03 ?? null,
     };
 }

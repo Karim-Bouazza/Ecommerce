@@ -32,11 +32,6 @@ export default function ProductSummary({ product }: ProductSummaryProps) {
       </p>
       <h1 className="mt-1 text-lg font-semibold">{product.title}</h1>
 
-      <p className="mt-2 text-sm leading-5 text-muted-foreground">
-        {product.description ||
-          "Aucune description disponible pour ce produit."}
-      </p>
-
       <div className="mt-3 flex flex-wrap items-center gap-2.5 border-t pt-3">
         {hasDiscount ? (
           <>

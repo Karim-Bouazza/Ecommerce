@@ -24,6 +24,11 @@ class UpdateProductRequest extends FormRequest
             'price_after_discount' => ['sometimes', 'nullable', 'numeric', 'min:0', 'lte:price'],
             'category_id' => ['sometimes', 'integer', 'exists:categories,id'],
             'main_photo' => ['sometimes', 'nullable', 'image', 'max:5120'],
+            'sub_images' => ['sometimes', 'array', 'max:3'],
+            'sub_images.*' => ['sometimes', 'nullable', 'image', 'max:5120'],
+            'sub_image_01' => ['sometimes', 'nullable', 'image', 'max:5120'],
+            'sub_image_02' => ['sometimes', 'nullable', 'image', 'max:5120'],
+            'sub_image_03' => ['sometimes', 'nullable', 'image', 'max:5120'],
         ];
     }
 }

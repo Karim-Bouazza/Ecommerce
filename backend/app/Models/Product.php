@@ -22,6 +22,9 @@ class Product extends Model
         'price_after_discount',
         'category_id',
         'main_photo_path',
+        'sub_image_url_01',
+        'sub_image_url_02',
+        'sub_image_url_03',
     ];
 
     /**
@@ -33,6 +36,10 @@ class Product extends Model
             'quantity' => 'integer',
             'price' => 'decimal:2',
             'price_after_discount' => 'decimal:2',
+            'description' => 'array',
+            'sub_image_url_01' => 'string',
+            'sub_image_url_02' => 'string',
+            'sub_image_url_03' => 'string',
         ];
     }
 
